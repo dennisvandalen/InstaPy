@@ -250,6 +250,9 @@ class InstaPy:
       # Make sure the tag is a string
       tag = tag.__str__()
 
+      # Remove #
+      tag = tag[1:] if tag[:1] == '#' else tag
+
       print('Tag [{}/{}]'.format(index + 1, len(tags)))
       print('--> {}'.format(tag.encode('utf-8')))
       self.logFile.write('Tag [{}/[]]'.format(index + 1, len(tags)))

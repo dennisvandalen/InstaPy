@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from .time_util import sleep
 
 class LinkType(Enum):
-    TAG = 'tags',
+    TAG = 'tags'
     LOCATION = 'locations'
 
 def get_links(browser, tag, amount, media=None, link_type=LinkType.TAG):

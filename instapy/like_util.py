@@ -1,12 +1,16 @@
 """Module that handles the like features"""
+from enum import Enum
 from math import ceil
 from re import findall
 from selenium.webdriver.common.keys import Keys
 
 from .time_util import sleep
 
+class LinkType(Enum):
+    TAG = 'tags',
+    LOCATION = 'locations'
 
-def get_links_for_tag(browser, tag, amount, media=None):
+def get_links(browser, tag, amount, media=None, link_type=LinkType.TAG):
   """Fetches the number of links specified
   by amount and returns a list of links"""
   if media is None:
@@ -19,8 +23,7 @@ def get_links_for_tag(browser, tag, amount, media=None):
     # Make it an array to use it in the following part
     media = [media]
 
-  browser.get('https://www.instagram.com/explore/tags/'
-              + (tag[1:] if tag[:1] == '#' else tag))
+  browser.get('https://www.instagram.com/explore/' + link_type.value + '/' + tag)
   sleep(2)
 
   # clicking load more

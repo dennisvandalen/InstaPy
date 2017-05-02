@@ -9,8 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 from .clarifai_util import check_image
 from .comment_util import comment_image
-from .like_util import check_link
-from .like_util import get_links_for_tag
+from .like_util import check_link, LinkType, get_links
 from .like_util import get_tags
 from .like_util import like_image
 from .login_util import login_user
@@ -234,8 +233,7 @@ class InstaPy:
     self.like_by_followers_lower_limit = limit or 0
     return self
 
-  def like_by_tags(self, tags=None, amount=50, media=None):
-
+  def like_by_tags(self, tags=None, amount=50, media=None, link_type=LinkType.TAG):
     """Likes (default) 50 images per given tag"""
     if self.aborting:
       return self
@@ -249,13 +247,16 @@ class InstaPy:
     tags = tags or []
 
     for index, tag in enumerate(tags):
+      # Make sure the tag is a string
+      tag = tag.__str__()
+
       print('Tag [{}/{}]'.format(index + 1, len(tags)))
       print('--> {}'.format(tag.encode('utf-8')))
       self.logFile.write('Tag [{}/[]]'.format(index + 1, len(tags)))
       self.logFile.write('--> {}\n'.format(tag.encode('utf-8')))
 
       try:
-        links = get_links_for_tag(self.browser, tag, amount, media)
+        links = get_links(self.browser, tag, amount, media, link_type)
       except NoSuchElementException:
         print('Too few images, aborting')
         self.logFile.write('Too few images, aborting\n')
